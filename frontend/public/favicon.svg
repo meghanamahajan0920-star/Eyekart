@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="eyekart-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+  <!-- Brand Dark Rounded Badge Background -->
+  <rect width="32" height="32" rx="7" fill="url(#eyekart-bg)" />
+  <rect x="0.5" y="0.5" width="31" height="31" rx="6.5" fill="none" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1" />
+  
+  <!-- EyeKart Signature Eyewear Brand Icon -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left Temple Hinge -->
+    <line x1="2" y1="16" x2="3.3" y2="16" stroke="#38bdf8" stroke-width="2" />
+    <!-- Right Temple Hinge -->
+    <line x1="28.7" y1="16" x2="30" y2="16" stroke="#38bdf8" stroke-width="2" />
+    <!-- Left Lens Frame -->
+    <circle cx="8.5" cy="16" r="5.2" fill="rgba(56, 189, 248, 0.16)" stroke="#ffffff" stroke-width="2.2" />
+    <!-- Right Lens Frame -->
+    <circle cx="23.5" cy="16" r="5.2" fill="rgba(56, 189, 248, 0.16)" stroke="#ffffff" stroke-width="2.2" />
+    <!-- Nose Bridge -->
+    <line x1="13.7" y1="16" x2="18.3" y2="16" stroke="#38bdf8" stroke-width="2.4" />
+    <!-- Subtle Lens Glare Highlights -->
+    <path d="M 6.6 13.6 A 3.8 3.8 0 0 1 9.8 12.6" stroke="rgba(255, 255, 255, 0.65)" stroke-width="1.2" />
+    <path d="M 21.6 13.6 A 3.8 3.8 0 0 1 24.8 12.6" stroke="rgba(255, 255, 255, 0.65)" stroke-width="1.2" />
+  </g>
+</svg>

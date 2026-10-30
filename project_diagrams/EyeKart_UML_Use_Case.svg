@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3400 2500" width="3400" height="2500">
+<defs>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Fira+Code:wght@500;600&amp;display=swap');
+        text { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .main-title { font-size: 32px; font-weight: 800; fill: #0f172a; }
+        .sub-title { font-size: 15px; font-weight: 500; fill: #475569; }
+        .boundary-title { font-size: 22px; font-weight: 800; fill: #1e3a8a; letter-spacing: 0.5px; }
+        .actor-title { font-size: 18px; font-weight: 800; fill: #0f172a; }
+        .actor-sub { font-size: 12px; font-weight: 600; fill: #64748b; }
+        .uc-text { font-size: 13px; font-weight: 700; fill: #1e293b; text-anchor: middle; }
+        .uc-sub { font-size: 10px; font-weight: 500; fill: #64748b; text-anchor: middle; }
+        .stereo { font-size: 11px; font-weight: 700; fill: #2563eb; font-style: italic; text-anchor: middle; }
+        .legend-title { font-size: 13px; font-weight: 700; fill: #1e293b; }
+        .legend-text { font-size: 12px; font-weight: 500; fill: #475569; }
+    </style>
+    
+    <!-- Drop Shadow Filter -->
+    <filter id="shadowSm" x="-6%" y="-6%" width="112%" height="112%" filterUnits="userSpaceOnUse">
+        <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+
+    <!-- UML Dependency Arrow Marker -->
+    <marker id="umlArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M 0 2 L 8 5 L 0 8" fill="none" stroke="#2563eb" stroke-width="1.8" />
+    </marker>
+    <marker id="umlArrowAmber" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M 0 2 L 8 5 L 0 8" fill="none" stroke="#d97706" stroke-width="1.8" />
+    </marker>
+</defs>
+
+<!-- Clean White Background -->
+<rect width="3400" height="2500" fill="#ffffff" />
+
+<!-- Academic Blueprint Grid -->
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+</pattern>
+<rect width="3400" height="2500" fill="url(#grid)" opacity="0.6"/>
+
+<!-- Header Section -->
+<g id="header" transform="translate(80, 40)">
+    <rect x="0" y="0" width="3240" height="100" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+    <path d="M 0 14 Q 0 0 14 0 L 26 0 L 26 100 L 14 100 Q 0 100 0 86 Z" fill="#2563eb" />
+    
+    <text x="45" y="42" class="main-title">EyeKart Eyewear E-Commerce Platform — UML Use Case Diagram</text>
+    <text x="45" y="70" class="sub-title">Complete Functional System Model • Primary Actors, System Boundary, Use Cases, &lt;&lt;include&gt;&gt; &amp; &lt;&lt;extend&gt;&gt; Stereotypes</text>
+    
+    <!-- Legend Box -->
+    <g transform="translate(2560, 16)">
+        <rect x="0" y="0" width="650" height="68" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+        <text x="16" y="22" class="legend-title">UML NOTATION LEGEND:</text>
+        <line x1="20" y1="46" x2="60" y2="46" stroke="#475569" stroke-width="2"/>
+        <text x="70" y="50" class="legend-text">Association</text>
+        
+        <path d="M 170 46 L 220 46" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrow)"/>
+        <text x="230" y="50" class="legend-text">&lt;&lt;include&gt;&gt; (Mandatory)</text>
+        
+        <path d="M 390 46 L 440 46" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+        <text x="450" y="50" class="legend-text">&lt;&lt;extend&gt;&gt; (Optional / Conditional)</text>
+    </g>
+</g>
+
+<!-- ================================================================================= -->
+<!-- SYSTEM BOUNDARY: EyeKart E-Commerce Website -->
+<!-- ================================================================================= -->
+<g id="system_boundary" transform="translate(480, 180)">
+    <!-- Main Boundary Container -->
+    <rect x="0" y="0" width="2440" height="2240" rx="20" fill="#fafbfc" stroke="#1e3a8a" stroke-width="3" stroke-dasharray="16,8"/>
+    
+    <!-- System Boundary Title Pill -->
+    <rect x="40" y="-22" width="460" height="44" rx="8" fill="#1e3a8a" />
+    <text x="270" y="6" text-anchor="middle" font-size="16" font-weight="800" fill="#ffffff">SYSTEM: EyeKart E-Commerce Website</text>
+</g>
+
+<!-- ================================================================================= -->
+<!-- ACTOR 1: CUSTOMER (Stick Figure Left) -->
+<!-- ================================================================================= -->
+<g id="actor_customer" transform="translate(220, 680)">
+    <!-- Stick Figure -->
+    <circle cx="0" cy="0" r="32" fill="#ffffff" stroke="#1e40af" stroke-width="3.5"/> <!-- Head -->
+    <line x1="0" y1="32" x2="0" y2="120" stroke="#1e40af" stroke-width="3.5"/> <!-- Body -->
+    <line x1="-50" y1="65" x2="50" y2="65" stroke="#1e40af" stroke-width="3.5"/> <!-- Arms -->
+    <line x1="0" y1="120" x2="-45" y2="200" stroke="#1e40af" stroke-width="3.5"/> <!-- Left Leg -->
+    <line x1="0" y1="120" x2="45" y2="200" stroke="#1e40af" stroke-width="3.5"/> <!-- Right Leg -->
+    
+    <!-- Actor Labels -->
+    <text x="0" y="240" text-anchor="middle" class="actor-title">CUSTOMER</text>
+    <text x="0" y="262" text-anchor="middle" class="actor-sub">&lt;&lt;Primary Actor&gt;&gt;</text>
+    <text x="0" y="280" text-anchor="middle" font-size="11" fill="#475569">Shopper / Authenticated Buyer</text>
+</g>
+
+<!-- ================================================================================= -->
+<!-- ACTOR 2: ADMINISTRATOR (Stick Figure Right Top) -->
+<!-- ================================================================================= -->
+<g id="actor_admin" transform="translate(3180, 520)">
+    <!-- Stick Figure -->
+    <circle cx="0" cy="0" r="32" fill="#ffffff" stroke="#4338ca" stroke-width="3.5"/> <!-- Head -->
+    <line x1="0" y1="32" x2="0" y2="120" stroke="#4338ca" stroke-width="3.5"/> <!-- Body -->
+    <line x1="-50" y1="65" x2="50" y2="65" stroke="#4338ca" stroke-width="3.5"/> <!-- Arms -->
+    <line x1="0" y1="120" x2="-45" y2="200" stroke="#4338ca" stroke-width="3.5"/> <!-- Left Leg -->
+    <line x1="0" y1="120" x2="45" y2="200" stroke="#4338ca" stroke-width="3.5"/> <!-- Right Leg -->
+    
+    <!-- Actor Labels -->
+    <text x="0" y="240" text-anchor="middle" class="actor-title" fill="#4338ca">ADMINISTRATOR</text>
+    <text x="0" y="262" text-anchor="middle" class="actor-sub">&lt;&lt;Primary Actor&gt;&gt;</text>
+    <text x="0" y="280" text-anchor="middle" font-size="11" fill="#475569">Platform Owner / Catalog Manager</text>
+</g>
+
+<!-- ================================================================================= -->
+<!-- ACTOR 3: RAZORPAY PAYMENT GATEWAY (External System Box Right Bottom) -->
+<!-- ================================================================================= -->
+<g id="actor_razorpay" transform="translate(3050, 1680)" filter="url(#shadowSm)">
+    <!-- Standard UML Actor Box for External System -->
+    <rect x="0" y="0" width="260" height="150" rx="10" fill="#ffffff" stroke="#0f766e" stroke-width="3"/>
+    <path d="M 0 10 Q 0 0 10 0 L 250 0 Q 260 0 260 10 L 260 38 L 0 38 Z" fill="#0f766e"/>
+    
+    <text x="130" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">&lt;&lt;External System Actor&gt;&gt;</text>
+    <text x="130" y="70" text-anchor="middle" font-size="17" font-weight="800" fill="#0f766e">RAZORPAY</text>
+    <text x="130" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">Payment Gateway</text>
+    <text x="130" y="118" text-anchor="middle" font-size="11" fill="#64748b">PCI-DSS 3DS Online Settlement</text>
+</g>
+
+    <g id="uc_register" transform="translate(780, 290)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="130" ry="42" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Register Account</text>
+        <text x="0" y="14" class="uc-sub">New Customer Signup</text>
+    </g>
+    
+    <g id="uc_login" transform="translate(780, 410)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="130" ry="42" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Login / Authenticate</text>
+        <text x="0" y="14" class="uc-sub">Email & Password Auth</text>
+    </g>
+    
+    <g id="uc_browse_cat" transform="translate(780, 540)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="140" ry="44" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Browse Catalog & Filters</text>
+        <text x="0" y="14" class="uc-sub">Categories, Brands & Gender</text>
+    </g>
+    
+    <g id="uc_search_prod" transform="translate(780, 670)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="130" ry="42" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Search Eyewear</text>
+        <text x="0" y="14" class="uc-sub">Keyword & Filter Matching</text>
+    </g>
+    
+    <g id="uc_view_details" transform="translate(780, 800)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="150" ry="46" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">View Product Details</text>
+        <text x="0" y="14" class="uc-sub">Specs, Rim, Material & 3D/Images</text>
+    </g>
+    
+    <g id="uc_select_variant" transform="translate(1150, 800)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="140" ry="44" fill="#eff6ff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Select Color Variant</text>
+        <text x="0" y="14" class="uc-sub">Frame Color Swatches & Stock</text>
+    </g>
+    
+    <g id="uc_manage_cart" transform="translate(780, 950)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="140" ry="44" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Manage Shopping Cart</text>
+        <text x="0" y="14" class="uc-sub">Add, Remove & Adjust Qty</text>
+    </g>
+    
+    <g id="uc_manage_wishlist" transform="translate(780, 1100)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="140" ry="44" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Manage Wishlist</text>
+        <text x="0" y="14" class="uc-sub">Bookmark Favorite Eyewear</text>
+    </g>
+    
+    <g id="uc_checkout" transform="translate(820, 1300)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="150" ry="48" fill="#ffffff" stroke="#059669" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Checkout & Place Order</text>
+        <text x="0" y="14" class="uc-sub">Delivery Address & Confirmation</text>
+    </g>
+    
+    <g id="uc_upload_rx" transform="translate(1280, 1180)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="155" ry="48" fill="#f0fdfa" stroke="#0f766e" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Upload / Enter Prescription</text>
+        <text x="0" y="14" class="uc-sub">OD/OS Powers & Rx File (PDF/JPG)</text>
+    </g>
+    
+    <g id="uc_select_payment" transform="translate(1280, 1420)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="155" ry="48" fill="#ffffff" stroke="#0d9488" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Select Payment Method</text>
+        <text x="0" y="14" class="uc-sub">Online PG or Cash on Delivery</text>
+    </g>
+    
+    <g id="uc_pay_online" transform="translate(1700, 1580)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="150" ry="46" fill="#f0fdfa" stroke="#0d9488" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Make Online Payment</text>
+        <text x="0" y="14" class="uc-sub">Razorpay Card / UPI / NetBanking</text>
+    </g>
+    
+    <g id="uc_pay_cod" transform="translate(1700, 1420)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="135" ry="42" fill="#f8fafc" stroke="#64748b" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Cash on Delivery (COD)</text>
+        <text x="0" y="14" class="uc-sub">Pay on Courier Arrival</text>
+    </g>
+    
+    <g id="uc_view_orders" transform="translate(820, 1680)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="145" ry="44" fill="#ffffff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">View My Orders</text>
+        <text x="0" y="14" class="uc-sub">Order History & Invoices</text>
+    </g>
+    
+    <g id="uc_track_status" transform="translate(1240, 1680)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="135" ry="42" fill="#eff6ff" stroke="#2563eb" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Track Delivery Status</text>
+        <text x="0" y="14" class="uc-sub">Real-time Tracking Updates</text>
+    </g>
+    
+    <g id="uc_cancel_order" transform="translate(1240, 1820)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="135" ry="42" fill="#fef2f2" stroke="#dc2626" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Cancel Pending Order</text>
+        <text x="0" y="14" class="uc-sub">Restore Stock to Inventory</text>
+    </g>
+    
+    <g id="uc_submit_review" transform="translate(820, 1980)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="145" ry="46" fill="#fffbeb" stroke="#d97706" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Submit Product Review</text>
+        <text x="0" y="14" class="uc-sub">1 to 5 Stars & Customer Text</text>
+    </g>
+    
+    <g id="uc_verify_buyer" transform="translate(1280, 1980)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="145" ry="44" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Verify Purchase Eligibility</text>
+        <text x="0" y="14" class="uc-sub">Order Delivery Validation</text>
+    </g>
+    
+    <g id="uc_logout" transform="translate(780, 2180)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="120" ry="38" fill="#ffffff" stroke="#64748b" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Logout</text>
+        <text x="0" y="14" class="uc-sub">Invalidate Local Session</text>
+    </g>
+    
+    <g id="uc_admin_login" transform="translate(2600, 290)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="140" ry="44" fill="#ffffff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Admin Login</text>
+        <text x="0" y="14" class="uc-sub">Role Authorization (admin)</text>
+    </g>
+    
+    <g id="uc_view_dashboard" transform="translate(2600, 420)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="155" ry="46" fill="#ffffff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">View Admin Dashboard</text>
+        <text x="0" y="14" class="uc-sub">Total Sales, Revenue & KPIs</text>
+    </g>
+    
+    <g id="uc_manage_products" transform="translate(2600, 560)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="160" ry="48" fill="#ffffff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Manage Products</text>
+        <text x="0" y="14" class="uc-sub">Catalog Add, Edit, Delete</text>
+    </g>
+    
+    <g id="uc_manage_variants" transform="translate(2140, 560)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="150" ry="46" fill="#eef2ff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Manage Color Variants</text>
+        <text x="0" y="14" class="uc-sub">Add/Edit Frame Swatches & Images</text>
+    </g>
+    
+    <g id="uc_manage_categories" transform="translate(2600, 710)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="155" ry="46" fill="#ffffff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Manage Categories & Brands</text>
+        <text x="0" y="14" class="uc-sub">Taxonomy & Optical Specs</text>
+    </g>
+    
+    <g id="uc_update_stock" transform="translate(2600, 850)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="150" ry="44" fill="#ffffff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Update Stock / Inventory</text>
+        <text x="0" y="14" class="uc-sub">Warehouse Level Adjustments</text>
+    </g>
+    
+    <g id="uc_manage_orders" transform="translate(2600, 1000)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="155" ry="46" fill="#ffffff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">View Customer Orders</text>
+        <text x="0" y="14" class="uc-sub">Filter Orders by Status/Date</text>
+    </g>
+    
+    <g id="uc_update_order_status" transform="translate(2140, 1000)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="160" ry="46" fill="#eef2ff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Update Order Status</text>
+        <text x="0" y="14" class="uc-sub">Pending → Shipped → Delivered</text>
+    </g>
+    
+    <g id="uc_inspect_rx" transform="translate(2140, 1160)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="160" ry="46" fill="#f0fdfa" stroke="#0f766e" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Inspect & Verify Rx Files</text>
+        <text x="0" y="14" class="uc-sub">Validate Customer Lens Powers</text>
+    </g>
+    
+    <g id="uc_view_customers" transform="translate(2600, 1160)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="150" ry="44" fill="#ffffff" stroke="#4338ca" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">View Customer Directory</text>
+        <text x="0" y="14" class="uc-sub">Registered Users & Spend Stats</text>
+    </g>
+    
+    <g id="uc_moderate_reviews" transform="translate(2600, 1310)" filter="url(#shadowSm)">
+        <ellipse cx="0" cy="0" rx="150" ry="44" fill="#ffffff" stroke="#d97706" stroke-width="2.2" />
+        <text x="0" y="-4" class="uc-text">Moderate & Delete Reviews</text>
+        <text x="0" y="14" class="uc-sub">Quality & Content Governance</text>
+    </g>
+    
+<!-- Customer Associations -->
+<line x1="260" y1="680" x2="650" y2="290" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="690" x2="650" y2="410" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="700" x2="640" y2="540" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="710" x2="650" y2="670" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="720" x2="630" y2="800" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="730" x2="640" y2="950" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="740" x2="640" y2="1100" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="750" x2="670" y2="1300" stroke="#059669" stroke-width="2.5"/>
+<line x1="260" y1="760" x2="675" y2="1680" stroke="#1e40af" stroke-width="2"/>
+<line x1="260" y1="770" x2="675" y2="1980" stroke="#d97706" stroke-width="2"/>
+<line x1="260" y1="780" x2="660" y2="2180" stroke="#64748b" stroke-width="1.8"/>
+
+<!-- Administrator Associations -->
+<line x1="3140" y1="520" x2="2740" y2="290" stroke="#4338ca" stroke-width="2"/>
+<line x1="3140" y1="530" x2="2755" y2="420" stroke="#4338ca" stroke-width="2"/>
+<line x1="3140" y1="540" x2="2760" y2="560" stroke="#4338ca" stroke-width="2"/>
+<line x1="3140" y1="550" x2="2755" y2="710" stroke="#4338ca" stroke-width="2"/>
+<line x1="3140" y1="560" x2="2750" y2="850" stroke="#4338ca" stroke-width="2"/>
+<line x1="3140" y1="570" x2="2755" y2="1000" stroke="#4338ca" stroke-width="2"/>
+<line x1="3140" y1="580" x2="2750" y2="1160" stroke="#4338ca" stroke-width="2"/>
+<line x1="3140" y1="590" x2="2750" y2="1310" stroke="#d97706" stroke-width="2"/>
+
+<!-- Razorpay Gateway Association -->
+<line x1="1850" y1="1580" x2="3050" y2="1730" stroke="#0f766e" stroke-width="2.5"/>
+<text x="2450" y="1635" font-size="12" font-weight="700" fill="#0f766e">3DS Payment Transaction Callback</text>
+
+    <line x1="1010" y1="800" x2="930" y2="800" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+    <g transform="translate(970, 800)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#d97706">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+    
+    <line x1="1125" y1="1205" x2="955" y2="1270" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+    <g transform="translate(1040, 1237.5)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#d97706">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+    
+    <line x1="965" y1="1330" x2="1130" y2="1395" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrow)"/>
+    <g transform="translate(1047.5, 1362.5)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#2563eb">&lt;&lt;include&gt;&gt;</text>
+    </g>
+    
+    <line x1="1555" y1="1545" x2="1425" y2="1450" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+    <g transform="translate(1490, 1497.5)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#d97706">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+    
+    <line x1="1565" y1="1420" x2="1435" y2="1420" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+    <g transform="translate(1500, 1420)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#d97706">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+    
+    <line x1="1105" y1="1680" x2="965" y2="1680" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+    <g transform="translate(1035, 1680)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#d97706">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+    
+    <line x1="1110" y1="1800" x2="945" y2="1710" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+    <g transform="translate(1027.5, 1755)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#d97706">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+    
+    <line x1="965" y1="1980" x2="1135" y2="1980" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrow)"/>
+    <g transform="translate(1050, 1980)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#2563eb">&lt;&lt;include&gt;&gt;</text>
+    </g>
+    
+    <line x1="2440" y1="560" x2="2290" y2="560" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrow)"/>
+    <g transform="translate(2365, 560)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#2563eb">&lt;&lt;include&gt;&gt;</text>
+    </g>
+    
+    <line x1="2445" y1="1000" x2="2300" y2="1000" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrow)"/>
+    <g transform="translate(2372.5, 1000)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#2563eb">&lt;&lt;include&gt;&gt;</text>
+    </g>
+    
+    <line x1="2200" y1="1120" x2="2520" y2="1035" stroke="#d97706" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#umlArrowAmber)"/>
+    <g transform="translate(2360, 1077.5)">
+        <rect x="-55" y="-12" width="110" height="24" rx="4" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+        <text x="0" y="4" class="stereo" fill="#d97706">&lt;&lt;extend&gt;&gt;</text>
+    </g>
+    
+<!-- Footer Metadata -->
+<g id="footer" transform="translate(80, 2440)">
+    <rect x="0" y="0" width="3240" height="45" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="25" y="28" font-size="12" font-weight="600" fill="#475569">EyeKart E-Commerce Platform • UML 2.5 Use Case Specification • Formatted for Academic Review &amp; System Documentation</text>
+    <text x="2720" y="28" font-size="12" font-weight="600" fill="#2563eb">100% Verified against Active React Frontend &amp; Express 5 Controller Routes</text>
+</g>
+</svg>

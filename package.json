@@ -1,0 +1,11 @@
+{
+  "name": "eyekart-eyewear",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EyeKart Eyewear E-Commerce Platform",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "node backend/server.js"
+  }
+}

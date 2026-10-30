@@ -1,0 +1,315 @@
+================================================================================
+EYEKART EYEWEAR E-COMMERCE PLATFORM — DATABASE SCHEMA AUDIT REPORT
+================================================================================
+Generated Date       : October 30, 2026
+Source Database      : MySQL 8.0+ (InnoDB, UTF-8 Unicode utf8mb4)
+Database Name        : eyekart_db
+Host / Port          : localhost:3306
+Total Verified Tables: 10 Tables
+Audit Status         : 100% Verified against Active MySQL Instance & Express 5 API
+
+--------------------------------------------------------------------------------
+1. EXECUTIVE SUMMARY & ARCHITECTURAL OVERVIEW
+--------------------------------------------------------------------------------
+The EyeKart database is a normalized relational schema designed for an omnichannel
+eyewear and sunglasses e-commerce application. The system supports full product
+catalog management with multi-color frame variants, category and brand taxonomies,
+shopping wishlist storage, transactional order management with ACID stock controls,
+prescription document/power capture, verified customer reviews, and multi-tier
+payment tracking (Razorpay Online PG + Cash on Delivery).
+
+Key Architectural Characteristics:
+- ACID Transactions: Orders and inventory stock updates are wrapped in MySQL
+  transactions with row-level locks ('FOR UPDATE') to prevent overselling.
+- Referential Integrity: Cascade deletion rules are enforced on child entities
+  (product_variants, order_items, reviews, wishlist, order_prescriptions) while
+  customer deletion sets foreign keys to NULL (ON DELETE SET NULL) on historical
+  orders to preserve audit and revenue trails.
+- Client-Side Cart: Shopping cart persistence is handled client-side via
+  browser LocalStorage ('eyekart_cart') for rapid UI interactions; cart data is
+  validated and converted into persistent database records ('orders', 'order_items',
+  'order_prescriptions') upon successful checkout.
+
+--------------------------------------------------------------------------------
+2. DETAILED TABLE SCHEMAS & ATTRIBUTE SPECIFICATIONS
+--------------------------------------------------------------------------------
+
+TABLE 1: users
+Description: Stores registered customers and administrators.
+Current Rows: 30
+--------------------------------------------------------------------------------
+Column Name   Data Type       Nullable  Key  Default            Constraints & Notes
+--------------------------------------------------------------------------------
+id            int             NO        PRI  auto_increment     Primary Key
+name          varchar(100)    NO             None               Full customer/admin name
+email         varchar(150)    NO        UNI  None               Unique user email (login identity)
+mobile        varchar(20)     YES       UNI  None               Unique phone number (contact/SMS)
+password      varchar(255)    NO             None               Bcrypt hashed secret
+role          varchar(50)     YES            'user'             Role-based access ('user' | 'admin')
+created_at    timestamp       YES            CURRENT_TIMESTAMP  Registration timestamp
+updated_at    timestamp       YES            CURRENT_TIMESTAMP  Last profile update timestamp
+--------------------------------------------------------------------------------
+Physical Foreign Keys: None
+Unique Indexes       : `email` (email), `uq_users_mobile` (mobile)
+
+
+TABLE 2: categories
+Description: Eyewear product categories (e.g., Eyeglasses, Sunglasses, Contact Lenses).
+Current Rows: 5
+--------------------------------------------------------------------------------
+Column Name   Data Type       Nullable  Key  Default            Constraints & Notes
+--------------------------------------------------------------------------------
+id            int             NO        PRI  auto_increment     Primary Key
+name          varchar(100)    NO        UNI  None               Category name (e.g. Eyeglasses)
+description   text            YES            None               Optional category description
+created_at    timestamp       YES            CURRENT_TIMESTAMP  Creation timestamp
+--------------------------------------------------------------------------------
+Physical Foreign Keys: None
+Unique Indexes       : `name` (name)
+
+
+TABLE 3: brands
+Description: Eyewear brands and manufacturers (e.g., Ray-Ban, Oakley, Titan, Vincent Chase).
+Current Rows: 11
+--------------------------------------------------------------------------------
+Column Name   Data Type       Nullable  Key  Default            Constraints & Notes
+--------------------------------------------------------------------------------
+id            int             NO        PRI  auto_increment     Primary Key
+name          varchar(100)    NO        UNI  None               Brand brand name
+created_at    timestamp       YES            CURRENT_TIMESTAMP  Creation timestamp
+--------------------------------------------------------------------------------
+Physical Foreign Keys: None
+Unique Indexes       : `name` (name)
+
+
+TABLE 4: products
+Description: Master catalog of frames, sunglasses, and optical lenses.
+Current Rows: 34
+--------------------------------------------------------------------------------
+Column Name   Data Type       Nullable  Key  Default            Constraints & Notes
+--------------------------------------------------------------------------------
+id            int             NO        PRI  auto_increment     Primary Key
+name          varchar(200)    NO             None               Product commercial title
+description   text            YES            None               Detailed product description
+category_id   int             YES       MUL  None               FK -> categories(id)
+brand_id      int             YES       MUL  None               FK -> brands(id)
+price         decimal(10,2)   NO             None               Base retail price in INR
+discount      decimal(5,2)    YES            0.00               Promotional discount percentage
+stock         int             YES            0                  Aggregated warehouse stock
+gender        varchar(30)     YES            None               Target gender ('Men','Women','Kids','Unisex')
+frame_type    varchar(50)     YES            None               Frame rim type ('Full Rim','Half Rim','Rimless')
+frame_material varchar(50)    YES            None               Material (e.g. Acetate, Metal, Titanium)
+lens_type     varchar(50)     YES            None               Lens specification / power capability
+color         varchar(50)     YES            None               Primary / default frame color
+image         varchar(500)    YES            None               Primary showcase image URL/path
+created_at    timestamp       YES            CURRENT_TIMESTAMP  Creation timestamp
+updated_at    timestamp       YES            CURRENT_TIMESTAMP  Last update timestamp
+--------------------------------------------------------------------------------
+Physical Foreign Keys:
+  - `products_ibfk_1`: category_id -> categories(id) [ON DELETE NO ACTION, ON UPDATE NO ACTION]
+  - `products_ibfk_2`: brand_id -> brands(id) [ON DELETE NO ACTION, ON UPDATE NO ACTION]
+Indexes:
+  - `category_id` (category_id)
+  - `brand_id` (brand_id)
+
+
+TABLE 5: product_variants
+Description: Color options, individual SKU images, and stock per color variant.
+Current Rows: 63
+--------------------------------------------------------------------------------
+Column Name      Data Type      Nullable Key Default           Constraints & Notes
+--------------------------------------------------------------------------------
+id               int            NO       PRI auto_increment    Primary Key
+product_id       int            NO       MUL None              FK -> products(id) ON DELETE CASCADE
+color_name       varchar(100)   NO           None              Color label (e.g., 'Matte Black')
+color_code       varchar(50)    NO           '#000000'         HEX color code for UI swatches
+image            varchar(500)   NO           None              Color-specific high-res frame image
+thumbnail        varchar(500)   YES          None              Optional thumbnail URL
+stock            int            YES          25                Inventory dedicated to this variant
+price_adjustment decimal(10,2)  YES          0.00              Price delta relative to base price
+is_default       tinyint(1)     YES          0                 1 if this is the default hero variant
+created_at       timestamp      YES          CURRENT_TIMESTAMP Creation timestamp
+updated_at       timestamp      YES          CURRENT_TIMESTAMP Last variant modification
+--------------------------------------------------------------------------------
+Physical Foreign Keys:
+  - `fk_product_variants_product`: product_id -> products(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+Indexes:
+  - `product_id` (product_id)
+
+
+TABLE 6: orders
+Description: Master orders created upon customer checkout.
+Current Rows: 25
+--------------------------------------------------------------------------------
+Column Name       Data Type      Nullable Key Default           Constraints & Notes
+--------------------------------------------------------------------------------
+id                int            NO       PRI auto_increment    Primary Key
+user_id           int            YES      MUL None              FK -> users(id) ON DELETE SET NULL
+customer_name     varchar(255)   NO           None              Recipient / shipping contact name
+mobile            varchar(20)    NO           None              Delivery contact telephone number
+address           text           NO           None              Full street / city / postal address
+payment_method    varchar(50)    NO           None              'COD' | 'Online' | 'Razorpay'
+total             decimal(10,2)  NO           None              Total payable amount in INR
+status            varchar(50)    YES      MUL 'Pending'         'Pending','Confirmed','Shipped','Delivered','Cancelled'
+payment_status    varchar(50)    YES          'Pending'         'Pending' | 'Paid' | 'Failed'
+payment_order_id  varchar(100)   YES          None              Razorpay Order ID (order_xxxxxxxxxxxx)
+payment_id        varchar(100)   YES          None              Razorpay Payment ID (pay_xxxxxxxxxxxx)
+payment_signature varchar(255)   YES          None              Razorpay cryptographic HMAC-SHA256 signature
+created_at        timestamp      YES      MUL CURRENT_TIMESTAMP Placement date and time
+--------------------------------------------------------------------------------
+Physical Foreign Keys:
+  - `fk_orders_user_id`: user_id -> users(id) [ON DELETE SET NULL, ON UPDATE NO ACTION]
+Indexes:
+  - `fk_orders_user_id` (user_id)
+  - `idx_orders_status` (status)
+  - `idx_orders_created_at` (created_at)
+
+
+TABLE 7: order_items
+Description: Individual line-item products and variants associated with an order.
+Current Rows: 34
+--------------------------------------------------------------------------------
+Column Name     Data Type      Nullable Key Default           Constraints & Notes
+--------------------------------------------------------------------------------
+id              int            NO       PRI auto_increment    Primary Key
+order_id        int            NO       MUL None              FK -> orders(id) ON DELETE CASCADE
+product_id      int            NO       MUL None              FK -> products(id) ON DELETE NO ACTION
+product_name    varchar(255)   NO           None              Snapshot of product name at purchase
+price           decimal(10,2)  NO           None              Locked line unit price in INR
+quantity        int            NO           None              Purchased quantity
+selected_color  varchar(100)   YES          None              Selected frame variant color name
+selected_image  varchar(500)   YES          None              Variant image URL snapshot
+variant_id      int            YES          None              Application-level FK -> product_variants(id)
+--------------------------------------------------------------------------------
+Physical Foreign Keys:
+  - `order_items_ibfk_1`: order_id -> orders(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+  - `order_items_ibfk_2`: product_id -> products(id) [ON DELETE NO ACTION, ON UPDATE NO ACTION]
+Application-Level Relationships:
+  - `variant_id` links to `product_variants(id)` without a physical foreign key constraint,
+    enabling variant history preservation even if variants are reconfigured.
+
+
+TABLE 8: order_prescriptions
+Description: Optical vision prescription specifications or file uploads tied to an order.
+Current Rows: 1
+--------------------------------------------------------------------------------
+Column Name           Data Type    Nullable Key Default           Constraints & Notes
+--------------------------------------------------------------------------------
+id                    int          NO       PRI auto_increment    Primary Key
+order_id              int          NO       UNI None              FK -> orders(id) ON DELETE CASCADE [1:1]
+user_id               int          NO       MUL None              FK -> users(id) ON DELETE CASCADE
+has_prescription      tinyint(1)   YES          1                 Boolean flag: 1 if RX attached
+right_sph             varchar(10)  YES          None              Right eye (OD) Sphere power
+right_cyl             varchar(10)  YES          None              Right eye (OD) Cylinder power
+right_axis            varchar(10)  YES          None              Right eye (OD) Axis degrees (0-180)
+left_sph              varchar(10)  YES          None              Left eye (OS) Sphere power
+left_cyl              varchar(10)  YES          None              Left eye (OS) Cylinder power
+left_axis             varchar(10)  YES          None              Left eye (OS) Axis degrees (0-180)
+pupillary_distance    varchar(10)  YES          None              Pupillary Distance in mm (e.g. '63')
+prescription_file_url varchar(255) YES          None              Uploaded RX file path (/api/prescriptions/file/...)
+notes                 text         YES          None              Customer lens or doctor notes
+created_at            timestamp    YES          CURRENT_TIMESTAMP Record creation timestamp
+--------------------------------------------------------------------------------
+Physical Foreign Keys:
+  - `order_prescriptions_ibfk_1`: order_id -> orders(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+  - `order_prescriptions_ibfk_2`: user_id -> users(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+Unique Indexes:
+  - `order_id` (order_id) — Enforces strict 1-to-1 relationship with `orders`.
+
+
+TABLE 9: reviews
+Description: Verified customer product ratings (1-5 stars) and feedback testimonials.
+Current Rows: 0
+--------------------------------------------------------------------------------
+Column Name   Data Type       Nullable Key Default           Constraints & Notes
+--------------------------------------------------------------------------------
+id            int             NO       PRI auto_increment    Primary Key
+product_id    int             NO       MUL None              FK -> products(id) ON DELETE CASCADE
+user_id       int             NO       MUL None              FK -> users(id) ON DELETE CASCADE
+order_id      int             YES      MUL None              FK -> orders(id) ON DELETE SET NULL
+rating        int             NO           None              Rating score integer (1 to 5)
+review        text            NO           None              Customer text review (3 to 1000 chars)
+created_at    timestamp       YES          CURRENT_TIMESTAMP Review timestamp
+updated_at    timestamp       YES          CURRENT_TIMESTAMP Last edit timestamp
+--------------------------------------------------------------------------------
+Physical Foreign Keys:
+  - `reviews_ibfk_1`: product_id -> products(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+  - `reviews_ibfk_2`: user_id -> users(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+  - `reviews_ibfk_3`: order_id -> orders(id) [ON DELETE SET NULL, ON UPDATE NO ACTION]
+Unique Indexes:
+  - `user_product_review_unique`: (user_id, product_id)
+    Prevents duplicate reviews; a customer can submit at most 1 review per product.
+
+
+TABLE 10: wishlist
+Description: Customer saved-for-later favorites list.
+Current Rows: 2
+--------------------------------------------------------------------------------
+Column Name   Data Type       Nullable Key Default           Constraints & Notes
+--------------------------------------------------------------------------------
+id            int             NO       PRI auto_increment    Primary Key
+user_id       int             NO       MUL None              FK -> users(id) ON DELETE CASCADE
+product_id    int             NO       MUL None              FK -> products(id) ON DELETE CASCADE
+created_at    timestamp       YES          CURRENT_TIMESTAMP Item bookmark timestamp
+--------------------------------------------------------------------------------
+Physical Foreign Keys:
+  - `wishlist_ibfk_1`: user_id -> users(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+  - `wishlist_ibfk_2`: product_id -> products(id) [ON DELETE CASCADE, ON UPDATE NO ACTION]
+Unique Indexes:
+  - `user_product_unique`: (user_id, product_id)
+    Ensures an item is added to a customer's wishlist only once.
+
+--------------------------------------------------------------------------------
+3. VERIFIED RELATIONSHIP MATRIX & CARDINALITY (CROW'S FOOT NOTATION)
+--------------------------------------------------------------------------------
+
+Source Entity          Cardinality   Target Entity           Constraint Type      Description
+----------------------------------------------------------------------------------------------------
+users (1)              1 : 0..N      orders                  Physical FK          A user places zero or many orders.
+orders (1)             1 : 1..N      order_items             Physical FK          An order contains one or more items.
+products (1)           1 : 0..N      order_items             Physical FK          A product is ordered in zero or many items.
+product_variants (1)   1 : 0..N      order_items             Application-level    An order item references a specific variant.
+orders (1)             1 : 0..1      order_prescriptions     Physical FK + UNIQUE An order can have at most 1 prescription.
+users (1)              1 : 0..N      order_prescriptions     Physical FK          A user can submit prescriptions across orders.
+categories (1)         1 : 0..N      products                Physical FK          A category groups multiple products.
+brands (1)             1 : 0..N      products                Physical FK          A brand produces multiple products.
+products (1)           1 : 0..N      product_variants        Physical FK          A frame has multiple color variants.
+users (1)              1 : 0..N      wishlist                Physical FK          A user can bookmark multiple products.
+products (1)           1 : 0..N      wishlist                Physical FK          A product can appear in multiple wishlists.
+users (1)              1 : 0..N      reviews                 Physical FK          A user can write reviews (max 1/product).
+products (1)           1 : 0..N      reviews                 Physical FK          A product receives multiple reviews.
+orders (1)             1 : 0..N      reviews                 Physical FK          A review is linked to qualifying order.
+
+--------------------------------------------------------------------------------
+4. APPLICATION-LEVEL RELATIONSHIPS & UNVERIFIED DETAILS
+--------------------------------------------------------------------------------
+1. `order_items.variant_id` -> `product_variants(id)`:
+   - In MySQL, `variant_id` does not have a physical FOREIGN KEY constraint.
+   - However, in backend query execution (`server.js`), `variant_id` is passed,
+     verified against `product_variants`, and stock is decremented from
+     `product_variants` when `variant_id` is supplied.
+   - Categorized as: **Application-Level Relationship**.
+
+2. Shopping Cart Storage:
+   - There is NO persistent `cart` table in MySQL `eyekart_db`.
+   - The shopping cart is managed via React Client-Side Context (`CartContext.tsx`)
+     and persisted in the user's browser via `localStorage['eyekart_cart']`.
+   - Upon clicking "Place Order" / "Proceed to Payment", the cart array is sent
+     directly to `POST /api/orders` to instantiate records in `orders` and `order_items`.
+
+3. Prescription Document Storage:
+   - Physical prescription image/PDF files are stored on disk under:
+     `backend/uploads/prescriptions/rx_<userId>_<timestamp>_<hex>.<ext>`
+   - The database table `order_prescriptions` stores the secure relative URI:
+     `/api/prescriptions/file/<safeFilename>`
+   - Endpoint `GET /api/prescriptions/file/:filename` enforces JWT ownership checks.
+
+4. External Payment Gateway Integration:
+   - Razorpay payment order initiation (`/api/payments/create-order`) and
+     signature validation (`/api/payments/verify`) are actively implemented.
+   - Razorpay payment IDs (`payment_order_id`, `payment_id`, `payment_signature`)
+     are persisted directly in the `orders` table.
+
+================================================================================
+END OF AUDIT REPORT
+================================================================================

@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "EyeKart Eyewear E-Commerce Backend API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_payment_methods.js && node test_phase9_e2e_integration.js",
+    "test:all": "node test_payment_methods.js && node test_phase4_backend.js && node test_phase6_backend.js && node test_phase7_security.js && node test_phase9_e2e_integration.js",
+    "migrate": "node migrate_production.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.5",
+    "razorpay": "^2.9.8"
+  }
+}
